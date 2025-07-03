@@ -127,3 +127,33 @@ form button:hover {
     border-bottom: 2px solid #1abc9c;
   }
 }
+
+/* Tabla de stock */
+.tabla-stock {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  background-color: #fff;
+  color: #333;
+  font-size: 15px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+/* Encabezado de la tabla */
+.tabla-stock thead {
+  background-color: #1abc9c;
+  color: #fff;
+}
+
+.tabla-stock th,
+.tabla-stock td {
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.tabla-stock tbody tr:hover {
+  background-color: #f2f2f2;
+}

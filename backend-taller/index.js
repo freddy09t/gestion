@@ -191,22 +191,46 @@ app.post("/api/login", async (req, res) => {
 });
 
 // =======================================================
-// Obtener stock
+// ✅ Obtener stock de insumos (respuesta con clave `insumos`)
 app.get("/api/obtener-stock", async (req, res) => {
-  if (!pool) return res.status(500).json({ error: "Base de datos no conectada" });
+  console.log("📥 Petición recibida: GET /api/obtener-stock");
+
+  if (!pool) {
+    console.error("❌ Base de datos no conectada (pool no inicializado)");
+    return res.status(500).json({ error: "Base de datos no conectada" });
+  }
 
   try {
+    console.log("🔍 Ejecutando consulta SQL para obtener insumos...");
+
     const result = await pool.request().query(`
       SELECT id_insumo, nombre, tipo, unidad_medida, stock_actual, stock_minimo
       FROM Insumos
     `);
 
-    res.json(result.recordset);
+    console.log("✅ Consulta SQL ejecutada correctamente");
+
+    if (!result || !result.recordset) {
+      console.warn("⚠️ La respuesta no contiene recordset");
+      return res.status(500).json({ error: "Error inesperado en los datos recibidos" });
+    }
+
+    if (result.recordset.length === 0) {
+      console.warn("⚠️ No hay insumos registrados en la tabla Insumos");
+    } else {
+      console.log(`📦 Insumos obtenidos: ${result.recordset.length}`);
+      console.table(result.recordset);
+    }
+
+    // ✅ Envolver la respuesta en un objeto con clave "insumos"
+    res.json({ insumos: result.recordset });
   } catch (error) {
-    console.error("❌ Error al obtener el stock:", error);
+    console.error("❌ Error al obtener el stock de insumos:", error);
     res.status(500).json({ error: "Error al obtener el stock" });
   }
 });
+
+
 
 // =======================================================
 // ✅ NUEVAS RUTAS: Obtener todos los proveedores
@@ -253,4 +277,45 @@ app.use((req, res) => {
 const PORT = 3001;
 app.listen(PORT, () => {
   console.log(`🚀 Backend corriendo en http://localhost:${PORT}`);
+});
+
+// ... código anterior sin cambios ...
+
+// =======================================================
+// ✅ Obtener stock de insumos (con LOGS mejorados)
+app.get("/api/obtener-stock", async (req, res) => {
+  console.log("📥 Petición recibida: GET /api/obtener-stock");
+
+  if (!pool) {
+    console.error("❌ Base de datos no conectada (pool no inicializado)");
+    return res.status(500).json({ error: "Base de datos no conectada" });
+  }
+
+  try {
+    console.log("🔍 Ejecutando consulta SQL para obtener insumos...");
+
+    const result = await pool.request().query(`
+      SELECT id_insumo, nombre, tipo, unidad_medida, stock_actual, stock_minimo
+      FROM Insumos
+    `);
+
+    console.log("✅ Consulta SQL ejecutada correctamente");
+
+    if (!result || !result.recordset) {
+      console.warn("⚠️ La respuesta no contiene recordset");
+      return res.status(500).json({ error: "Error inesperado en los datos recibidos" });
+    }
+
+    if (result.recordset.length === 0) {
+      console.warn("⚠️ No hay insumos registrados en la tabla Insumos");
+    } else {
+      console.log(`📦 Insumos obtenidos: ${result.recordset.length}`);
+      console.table(result.recordset); // Muestra en tabla en consola
+    }
+
+    res.json(result.recordset);
+  } catch (error) {
+    console.error("❌ Error al obtener el stock de insumos:", error);
+    res.status(500).json({ error: "Error al obtener el stock" });
+  }
 });
