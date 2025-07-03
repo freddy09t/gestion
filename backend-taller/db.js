@@ -3,7 +3,7 @@ const dbConfig = {
   port: 1433,
   user: 'sa', 
   password: '12345678',
-  database: 'TallerConfeccionDB',
+  database: 'ConfeccionDB',
   options: {
     encrypt: false,
     trustServerCertificate: true

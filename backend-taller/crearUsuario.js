@@ -3,7 +3,7 @@ const sql = require("mssql");
 
 const dbConfig = {
   server: "localhost",
-  database: "TallerConfeccionDB",
+  database: "ConfeccionDB",
   options: {
     trustServerCertificate: true,
     trustedConnection: true
